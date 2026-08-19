@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Farm Plot Map</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+<header>
+    <div class="header-content">
+        <h1>Smart Irrigation Advisory System</h1>
+        <p>Smart Irrigation using AI & Sensor Technology</p>
+    </div>
+
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="farm-info.html">Farm Information</a>
+        <a href="advisory.html">Irrigation Advisory</a>
+        <a href="gallery.html">Farm Gallery</a>
+        <a href="plot-map.html">Farm Map</a>
+        <a href="irrigation-table.html">Irrigation Table</a>
+        <a href="registration.html">Registration</a>
+        <a href="weather.html">Weather</a>
+        <a href="media.html">Media</a>
+    </nav>
+</header>
+<section>
+
+    <h2>Farm Plot Map</h2>
+
+    <p>Click on a plot to view its details.</p>
+
+    <img src="sugarcane.jpg"
+         alt="Farm Plot Map"
+         usemap="#plotmap"
+         width="600"
+         height="400">
+
+    <map name="plotmap">
+
+        <area shape="rect"
+              coords="10,10,190,190"
+              href="plot-a.html"
+              alt="Plot A">
+
+        <area shape="rect"
+              coords="210,10,390,190"
+              href="plot-b.html"
+              alt="Plot B">
+
+        <area shape="rect"
+              coords="410,10,590,190"
+              href="plot-c.html"
+              alt="Plot C">
+
+    </map>
+
+</section>
+
+</body>
+</html>
