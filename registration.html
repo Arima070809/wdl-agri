@@ -31,32 +31,24 @@
 
     <h2>Farmer Registration Form</h2>
 
-    <form>
+    <form  id="registrationForm">
 
         <fieldset>
 
             <legend>Personal Details</legend>
 
             <label>Name:</label>
-            <input type="text"
-                   placeholder="Enter full name"
-                   required
-                   autofocus>
+            <input type="text" id="farmerName" placeholder="Enter full name" required autofocus>
 
             <br><br>
 
             <label>Mobile Number:</label>
-            <input type="tel"
-                   placeholder="10-digit mobile number"
-                   pattern="[0-9]{10}"
-                   required>
+            <input type="tel" id="mobile" placeholder="10-digit mobile number" pattern="[0-9]{10}" required>
 
             <br><br>
 
             <label>Email:</label>
-            <input type="email"
-                   placeholder="you@example.com"
-                   required>
+            <input type="email" id="email" placeholder="you@example.com" required>
 
         </fieldset>
 
@@ -65,22 +57,18 @@
             <legend>Farm Details</legend>
 
             <label>Plot ID:</label>
-            <input type="text"
-                   placeholder="Enter Plot ID"
-                   required>
+            <input type="text" id="plotId" placeholder="Enter Plot ID" required>
 
             <br><br>
 
             <label>Village:</label>
-            <input type="text"
-                   placeholder="Enter Village"
-                   required>
+            <input type="text" id="village" placeholder="Enter Village" required>
 
             <br><br>
 
             <label>Crop Stage:</label>
 
-            <select required>
+            <select id="cropStage" required>
                 <option value="">--Select--</option>
                 <option>Germination</option>
                 <option>Tillering</option>
@@ -92,7 +80,7 @@
 
             <label>Soil Type:</label>
 
-            <select required>
+            <select id="soilType" required>
                 <option value="">--Select--</option>
                 <option>Black Soil</option>
                 <option>Red Soil</option>
@@ -104,7 +92,7 @@
 
             <label>Irrigation Method:</label>
 
-            <select required>
+            <select id="irrigationMethod" required>
                 <option value="">--Select--</option>
                 <option>Drip</option>
                 <option>Sprinkler</option>
@@ -114,7 +102,7 @@
             <br><br>
 
             <label>Date:</label>
-            <input type="date" required>
+            <input type="date" id="registrationDate" required>
 
             <br><br>
 
@@ -129,5 +117,129 @@
 
 </section>
 
+<script>
+    document.getElementById("registrationForm").addEventListener("submit", function(event) {
+
+    // Get all form fields
+    let farmerName = document.getElementById("farmerName");
+    let mobile = document.getElementById("mobile");
+    let email = document.getElementById("email");
+    let plotId = document.getElementById("plotId");
+    let village = document.getElementById("village");
+    let cropStage = document.getElementById("cropStage");
+    let soilType = document.getElementById("soilType");
+    let irrigationMethod = document.getElementById("irrigationMethod");
+    let registrationDate = document.getElementById("registrationDate");
+
+    let valid = true;
+
+
+    // Farmer Name Validation
+    let namePattern = /^[A-Za-z ]+$/;
+
+    if (farmerName.value.trim() === "") {
+        alert("Farmer Name cannot be empty.");
+        farmerName.focus();
+        valid = false;
+    }
+    else if (!namePattern.test(farmerName.value.trim())) {
+        alert("Farmer Name should contain only alphabets and spaces.");
+        farmerName.focus();
+        valid = false;
+    }
+
+
+    // Mobile Number Validation
+    let mobilePattern = /^[6-9][0-9]{9}$/;
+
+    if (!mobilePattern.test(mobile.value.trim())) {
+        alert("Enter a valid 10-digit Indian mobile number.");
+        mobile.focus();
+        valid = false;
+    }
+
+
+    // Email Validation
+    let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailPattern.test(email.value.trim())) {
+        alert("Enter a valid email address.");
+        email.focus();
+        valid = false;
+    }
+
+
+    // Plot ID Validation
+    let plotPattern = /^[A-Za-z0-9-]+$/;
+
+    if (plotId.value.trim() === "") {
+        alert("Plot ID cannot be empty.");
+        plotId.focus();
+        valid = false;
+    }
+    else if (!plotPattern.test(plotId.value.trim())) {
+        alert("Enter a valid Plot ID.");
+        plotId.focus();
+        valid = false;
+    }
+
+
+    // Village Validation
+    if (village.value.trim() === "") {
+        alert("Village cannot be empty.");
+        village.focus();
+        valid = false;
+    }
+
+
+    // Crop Stage Validation
+    if (cropStage.value === "") {
+        alert("Please select Crop Stage.");
+        cropStage.focus();
+        valid = false;
+    }
+
+
+    // Soil Type Validation
+    if (soilType.value === "") {
+        alert("Please select Soil Type.");
+        soilType.focus();
+        valid = false;
+    }
+
+
+    // Irrigation Method Validation
+    if (irrigationMethod.value === "") {
+        alert("Please select Irrigation Method.");
+        irrigationMethod.focus();
+        valid = false;
+    }
+
+
+    // Registration Date Validation
+    let today = new Date().toISOString().split("T")[0];
+
+    if (registrationDate.value === "") {
+        alert("Please select Registration Date.");
+        registrationDate.focus();
+        valid = false;
+    }
+    else if (registrationDate.value > today) {
+        alert("Future dates are not allowed.");
+        registrationDate.focus();
+        valid = false;
+    }
+
+
+    // Prevent form submission if validation fails
+    if (valid === false) {
+        event.preventDefault();
+    }
+    else {
+        alert("Farmer Registration Successful!");
+    }
+
+});
+</script>
 </body>
 </html>
