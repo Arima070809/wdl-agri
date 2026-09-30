@@ -38,17 +38,16 @@
             <legend>Personal Details</legend>
 
             <label>Name:</label>
-            <input type="text" id="farmerName" placeholder="Enter full name" required autofocus>
-
+            <input type="text" id="farmerName" name="farmerName" placeholder="Enter full name" required autofocus>
             <br><br>
 
             <label>Mobile Number:</label>
-            <input type="tel" id="mobile" placeholder="10-digit mobile number" pattern="[0-9]{10}" required>
+            <input type="tel" id="mobile" name="mobile" placeholder="10-digit mobile number" required>
 
             <br><br>
 
             <label>Email:</label>
-            <input type="email" id="email" placeholder="you@example.com" required>
+            <input type="email" id="email" name="email" placeholder="you@example.com" required>
 
         </fieldset>
 
@@ -57,18 +56,18 @@
             <legend>Farm Details</legend>
 
             <label>Plot ID:</label>
-            <input type="text" id="plotId" placeholder="Enter Plot ID" required>
+            <input type="text" id="plotId" name="plotId" placeholder="Enter Plot ID" required>
 
             <br><br>
 
             <label>Village:</label>
-            <input type="text" id="village" placeholder="Enter Village" required>
+            <input type="text" id="village" name="village" placeholder="Enter Village" required>
 
             <br><br>
 
             <label>Crop Stage:</label>
 
-            <select id="cropStage" required>
+            <select id="cropStage" name="cropStage" required>
                 <option value="">--Select--</option>
                 <option>Germination</option>
                 <option>Tillering</option>
@@ -80,7 +79,7 @@
 
             <label>Soil Type:</label>
 
-            <select id="soilType" required>
+            <select id="soilType" name="soilType" required>
                 <option value="">--Select--</option>
                 <option>Black Soil</option>
                 <option>Red Soil</option>
@@ -92,8 +91,7 @@
 
             <label>Irrigation Method:</label>
 
-            <select id="irrigationMethod" required>
-                <option value="">--Select--</option>
+            <select id="irrigationMethod" name="irrigationMethod" required>                <option value="">--Select--</option>
                 <option>Drip</option>
                 <option>Sprinkler</option>
                 <option>Flood</option>
@@ -101,17 +99,42 @@
 
             <br><br>
 
-            <label>Date:</label>
-            <input type="date" id="registrationDate" required>
+            <label>Soil Moisture (%):</label>
+            <input type="number" id="soilMoisture" name="soilMoisture"><br>
 
-            <br><br>
+            <label>Required Soil Moisture (%):</label>
+            <input type="number" id="requiredMoisture" name="requiredMoisture" value="50"><br>
+
+            <label>Registration Date:</label>
+            <input type="date" id="registrationDate" name="registrationDate"><br>
+
+            <label>Irrigation Date:</label>
+            <input type="date" id="irrigationDate" name="irrigationDate"><br>
+
+            <label>Rainfall Forecast:</label>
+            <select id="rainfall" name="rainfall">
+                <option value="">--Select--</option>
+                <option value="yes">Rain Expected</option>
+                <option value="no">No Rain Expected</option>
+            </select><br>
 
             <label>Farm Photo:</label>
-            <input type="file">
+            <input type="file" id="farmPhoto" name="farmPhoto"><br>
 
         </fieldset>
 
-        <input type="submit" value="Register">
+        <button type="submit">Register</button>
+        <button type="reset">Reset</button>
+
+        <button type="button" onclick="showMoisture()">Show Moisture Status</button>
+
+        <button type="button" onclick="sugarcaneFarm.displayFarmInfo()">
+            Display Farm Information
+        </button>
+
+        <button type="button" onclick="displaySensorReadings()">
+            Display Sensor Readings
+        </button>
 
     </form>
 
@@ -132,7 +155,56 @@
     let registrationDate = document.getElementById("registrationDate");
 
     let valid = true;
+    
+    let soilMoisture = document.getElementById("soilMoisture");
+    let irrigationDate = document.getElementById("irrigationDate");
 
+    let requiredMoisture = document.getElementById("requiredMoisture");
+    let moistureDeficit = requiredMoisture.value - soilMoisture.value;
+    if (moistureDeficit > 0) {
+        alert("Irrigation Required. Moisture Deficit = " + moistureDeficit + "%");
+    }
+    else {
+        alert("Irrigation Not Required. Moisture Deficit = 0%");
+    }
+
+    if (soilMoisture.value === "" || soilMoisture.value < 0 || soilMoisture.value > 100) {
+        alert("Soil moisture must be between 0 and 100.");
+        valid = false;
+    }
+
+
+    let rainfall = document.getElementById("rainfall");
+
+    if (rainfall.value === "yes") {
+        alert("Postpone Irrigation because rain is expected.");
+    }
+    else if (soilMoisture.value < 30) {
+        alert("Irrigation Required Immediately.");
+    }
+    else if (soilMoisture.value >= 30 && soilMoisture.value <= 50) {
+        alert("Monitor Soil Moisture.");
+    }
+    else if (soilMoisture.value > 50) {
+        alert("Irrigation Not Required.");
+    }
+
+    if (registrationDate.value === "") {
+        alert("Registration date is required.");
+        valid = false;
+    }
+
+    let today = new Date().toISOString().split("T")[0];
+
+    if (registrationDate.value > today) {
+        alert("Registration date cannot be in the future.");
+        valid = false;
+    }
+
+    if (irrigationDate.value === "") {
+        alert("Irrigation date is required.");
+        valid = false;
+    }
 
     // Farmer Name Validation
     let namePattern = /^[A-Za-z ]+$/;
@@ -170,7 +242,7 @@
 
 
     // Plot ID Validation
-    let plotPattern = /^[A-Za-z0-9-]+$/;
+    let plotPattern = /^AGR-[0-9]{4}$/;
 
     if (plotId.value.trim() === "") {
         alert("Plot ID cannot be empty.");
@@ -217,11 +289,8 @@
 
 
     // Registration Date Validation
-    let today = new Date().toISOString().split("T")[0];
-
     if (registrationDate.value === "") {
-        alert("Please select Registration Date.");
-        registrationDate.focus();
+        registrationDate.style.border = "2px solid red";
         valid = false;
     }
     else if (registrationDate.value > today) {
@@ -229,6 +298,7 @@
         registrationDate.focus();
         valid = false;
     }
+
 
 
     // Prevent form submission if validation fails
@@ -240,6 +310,65 @@
     }
 
 });
+
+function showMoisture() {
+    let moisture = document.getElementById("soilMoisture").value;
+    let required = document.getElementById("requiredMoisture").value;
+    let deficit = required - moisture;
+
+    document.write("Current Soil Moisture: " + moisture + "%<br>");
+    document.write("Required Soil Moisture: " + required + "%<br>");
+    document.write("Moisture Deficit: " + deficit + "%");
+}
+
+let sugarcaneFarm = {
+    farmerName: "Rahul Patil",
+    plotId: "AGR-1234",
+    cropStage: "Grand Growth",
+    soilMoisture: 35,
+    area: 2,
+    pumpStatus: "ON",
+
+    displayFarmInfo: function() {
+        alert(
+            "Farmer Name: " + this.farmerName +
+            "\nPlot ID: " + this.plotId +
+            "\nCrop Stage: " + this.cropStage +
+            "\nSoil Moisture: " + this.soilMoisture + "%" +
+            "\nArea: " + this.area + " acres" +
+            "\nPump Status: " + this.pumpStatus
+        );
+    }
+};
+
+let sensorReadings = [25, 35, 42, 28, 55, 31, 20];
+let criticalValue = 30;
+
+let minimum = Math.min(...sensorReadings);
+let maximum = Math.max(...sensorReadings);
+
+let total = 0;
+let belowCritical = 0;
+
+for (let i = 0; i < sensorReadings.length; i++) {
+    total = total + sensorReadings[i];
+
+    if (sensorReadings[i] < criticalValue) {
+        belowCritical++;
+    }
+}
+
+let average = total / sensorReadings.length;
+
+function displaySensorReadings() {
+    alert(
+        "Sensor Readings: " + sensorReadings.join(", ") +
+        "\nMinimum: " + minimum +
+        "\nMaximum: " + maximum +
+        "\nAverage: " + average.toFixed(2) +
+        "\nBelow Critical Value: " + belowCritical
+    );
+}
 </script>
 </body>
 </html>
